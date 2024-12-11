@@ -6,14 +6,18 @@ import { Input } from '@/components/ui/input';
 import { BASE_URL } from '@/graphql/apolloClient';
 import { Copy } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import React from 'react';
 import { toast } from 'sonner';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_CHATBOT_BY_ID } from '@/graphql/queries/queries';
 import { GetChatbotByIdResponse, GetChatbotByIdVariables } from '@/types/types';
 import Characteristic from '@/components/Characteristic';
-import { DELETE_CHATBOT } from '@/graphql/mutations/mutations';
+import {
+  ADD_CHARACTERISTIC,
+  DELETE_CHATBOT,
+  UPDATE_CHATBOT,
+} from '@/graphql/mutations/mutations';
 import { redirect } from 'next/navigation';
 
 function EditChatbot({ params }: { params: Promise<{ id: string }> }) {
@@ -24,6 +28,14 @@ function EditChatbot({ params }: { params: Promise<{ id: string }> }) {
   const [deleteChatbot] = useMutation(DELETE_CHATBOT, {
     refetchQueries: ['GetChatbotById'],
     awaitRefetchQueries: true,
+  });
+
+  const [addCharacteristic] = useMutation(ADD_CHARACTERISTIC, {
+    refetchQueries: ['GetChatbotById'],
+  });
+
+  const [updateChatbot] = useMutation(UPDATE_CHATBOT, {
+    refetchQueries: ['GetChatbotById'],
   });
 
   const { data, loading, error } = useQuery<
@@ -53,6 +65,44 @@ function EditChatbot({ params }: { params: Promise<{ id: string }> }) {
       setUrl(url);
     }
   }, [id]);
+
+  const handleAddCharacteristic = async (content: string) => {
+    try {
+      const promise = addCharacteristic({
+        variables: {
+          chatbot_id: Number(id),
+          content,
+          created_at: new Date(),
+        },
+      });
+      toast.promise(promise, {
+        loading: 'Adding...',
+        success: 'Characteristic successfully added!',
+        error: 'Failed to add characteristic',
+      });
+    } catch (error) {
+      console.error('failed to add characteristic:', error);
+    }
+  };
+
+  const handleUpdateChatbot = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const promise = updateChatbot({
+        variables: {
+          id,
+          name: chatbotName,
+        },
+      });
+      toast.promise(promise, {
+        loading: 'Updating...',
+        success: 'Chatbot name successfully added!',
+        error: 'Failed to update chatbot',
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     const isConfirmed = window.confirm(
@@ -121,7 +171,7 @@ function EditChatbot({ params }: { params: Promise<{ id: string }> }) {
         <div className="flex space-x-4">
           <Avatar seed={chatbotName} />
           <form
-            // onSubmit={handleUpdateChatbot}
+            onSubmit={handleUpdateChatbot}
             className="flex flex-1 space-x-2 items-center"
           >
             <Input
@@ -142,21 +192,27 @@ function EditChatbot({ params }: { params: Promise<{ id: string }> }) {
           Your chatbot is equipped with the following information to assist you
           in your conversations with your customers and users.
         </p>
-        <div>
+        <div className="bg-gray-200 p-5 md:p-5 rounded-md mt-5">
           <form
-          // onSubmit={}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleAddCharacteristic(newCharacteristic);
+              setNewCharacteristic('');
+            }}
+            className="flex space-x-2 mb-5"
           >
             <Input
               type="text"
               placeholder="Example: if a customer asks for price, provide pricing page: www.example.com/pricing"
               value={newCharacteristic}
               onChange={(e) => setNewCharacteristic(e.target.value)}
+              className="bg-white"
             />
             <Button type="submit" disabled={!newCharacteristic}>
               Add
             </Button>
           </form>
-          <ul className="flex flex-wrap-reverse">
+          <ul className="flex flex-wrap-reverse gap-5">
             {data?.chatbots?.chatbot_characteristics?.map((characteristic) => (
               <Characteristic
                 key={characteristic.id}

@@ -18,7 +18,7 @@ function Characteristic({
     try {
       await removeCharacteristic({
         variables: {
-          id: characteristicId,
+          characteristicId,
         },
       });
     } catch (error) {
@@ -26,11 +26,15 @@ function Characteristic({
     }
   };
   return (
-    <li className="p-10 m-2 bg-white border rounded-md relative">
+    <li
+      key={characteristic.id}
+      className="p-10 bg-white border rounded-md relative"
+    >
       {characteristic.content}
       <Button
         variant="destructive"
-        className="w-2 h-6 text-white fill-red-500 absolute top-1 right-1 cursor-pointer hover:opacity-50"
+        className="h-7 w-7 text-white fill-red-500 absolute top-1 right-1 cursor-pointer hover:opacity-50"
+        size="icon"
         onClick={() => {
           const promise = handleRemoveCharacteristic(characteristic.id);
           toast.promise(promise, {
@@ -40,7 +44,7 @@ function Characteristic({
           });
         }}
       >
-        X{' '}
+        X
       </Button>
     </li>
   );
