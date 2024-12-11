@@ -186,7 +186,7 @@ function EditChatbot({ params }: { params: Promise<{ id: string }> }) {
           </form>
         </div>
         <h2 className="text-xl font-bold mt-10">
-          Here's what your AI knows...
+          Here&apos;s what your AI knows...
         </h2>
         <p>
           Your chatbot is equipped with the following information to assist you

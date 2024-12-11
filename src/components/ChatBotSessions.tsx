@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/accordion';
 import Avatar from './Avatar';
 import Link from 'next/link';
-import ReactTimeago from 'react-timeago';
 
 function ChatBotSessions({ chatbots }: { chatbots: Chatbot[] }) {
   const [sortedChatbots, setSortedChatbots] = useState<Chatbot[]>(chatbots);
@@ -59,9 +58,9 @@ function ChatBotSessions({ chatbots }: { chatbots: Chatbot[] }) {
                         <p className="text-sm font-light">
                           {session.guests?.email || 'No email provided'}
                         </p>
-                        <p className="absolute top-5 right-5 text-sm">
-                          <ReactTimeago date={new Date(session.created_at)} />
-                        </p>
+                        {/* <p className="absolute top-5 right-5 text-sm">
+                          <Moment date={new Date(session.created_at)} />
+                        </p> */}
                       </Link>
                     ))}
                   </AccordionContent>

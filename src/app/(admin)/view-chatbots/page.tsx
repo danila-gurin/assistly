@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { GET_CHATBOTS_BY_USER } from '@/graphql/queries/queries';
 import { serverClient } from '@/lib/server/serverClient';
 import {
-  Chatbot,
   GetChatbotsByUserData,
   GetChatbotsByUserDataVariables,
 } from '@/types/types';

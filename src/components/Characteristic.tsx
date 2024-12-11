@@ -2,7 +2,6 @@
 import { REMOVE_CHARACTERISTIC } from '@/graphql/mutations/mutations';
 import { ChatbotCharacteristic } from '@/types/types';
 import { useMutation } from '@apollo/client';
-import { OctagonX } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
 

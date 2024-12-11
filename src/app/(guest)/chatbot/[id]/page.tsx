@@ -6,7 +6,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import {
@@ -139,8 +138,8 @@ function ChatbotPage({ params }: { params: Promise<{ id: string }> }) {
   );
 
   const {
-    loading: loadingQuery,
-    error,
+    // loading: loadingQuery,
+    // error,
     data,
   } = useQuery<
     MessagesByChatSessionIdResponse,
@@ -161,7 +160,7 @@ function ChatbotPage({ params }: { params: Promise<{ id: string }> }) {
         <DialogContent className="sm:max-w-[425px]">
           <form onSubmit={handleInformationSubmit}>
             <DialogHeader>
-              <DialogTitle>Let's help you out!</DialogTitle>
+              <DialogTitle>Let&apos;s help you out!</DialogTitle>
               <DialogDescription>
                 I just need a few details to get started.
               </DialogDescription>
@@ -203,7 +202,7 @@ function ChatbotPage({ params }: { params: Promise<{ id: string }> }) {
       <div className="flex flex-col w-full max-w-3xl mx-auto bg-white md:rounded-t-lg shadow-2xl md:mt-10">
         <div className="pb-4 border-b sticky top-0 z-50 bg-[#4D7DFB] py-5 px-10 text-white md:rounded-t-lg flex items-center space-x-4">
           <Avatar
-            seed={chatBotData?.chatbots.name!}
+            seed={chatBotData?.chatbots.name ?? 'papajohns'}
             className="h-12 w-12 bg-white rounded-full border-2 border-white"
           />
           <div>
@@ -213,7 +212,7 @@ function ChatbotPage({ params }: { params: Promise<{ id: string }> }) {
         </div>
         <Messages
           messages={messages}
-          chatbotName={chatBotData?.chatbots.name!}
+          chatbotName={chatBotData?.chatbots.name ?? 'AI Support Chatbot'}
         />
 
         <Form {...form}>
